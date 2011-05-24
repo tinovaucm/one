@@ -181,6 +181,15 @@ LIB_DIRS="$LIB_LOCATION/ruby \
           $LIB_LOCATION/ruby/cloud/econe \
           $LIB_LOCATION/ruby/cloud/econe/views \
           $LIB_LOCATION/ruby/cloud/occi \
+          $LIB_LOCATION/catalog \
+          $LIB_LOCATION/catalog/scripts \
+          $LIB_LOCATION/catalog/scripts/common \
+          $LIB_LOCATION/catalog/scripts/common/centos \
+          $LIB_LOCATION/catalog/scripts/common/centos/init.d \
+          $LIB_LOCATION/catalog/scripts/common/debian \
+          $LIB_LOCATION/catalog/scripts/common/debian/init.d \
+          $LIB_LOCATION/ec2 \
+          $LIB_LOCATION/ec2/context \
           $LIB_LOCATION/onedb \
           $LIB_LOCATION/tm_commands \
           $LIB_LOCATION/tm_commands/nfs \
@@ -255,6 +264,7 @@ INSTALL_FILES=(
     MAD_SH_LIB_FILES:$LIB_LOCATION/sh
     MAD_SH_LIB_FILES:$VAR_LOCATION/remotes
     ONEDB_MIGRATOR_FILES:$LIB_LOCATION/onedb
+    CATALOG_LIB_FILES:$LIB_LOCATION/catalog
     MADS_LIB_FILES:$LIB_LOCATION/mads
     IM_PROBES_FILES:$VAR_LOCATION/remotes/im
     IM_PROBES_KVM_FILES:$VAR_LOCATION/remotes/im/kvm.d
@@ -320,6 +330,7 @@ INSTALL_SUNSTONE_FILES=(
 
 INSTALL_ETC_FILES=(
     ETC_FILES:$ETC_LOCATION
+    CATALOG_ETC_FILES:$ETC_LOCATION
     VMM_EC2_ETC_FILES:$ETC_LOCATION/vmm_ec2
     VMM_SSH_ETC_FILES:$ETC_LOCATION/vmm_ssh
     VMM_SH_ETC_FILES:$ETC_LOCATION/vmm_sh
@@ -352,7 +363,8 @@ BIN_FILES="src/nebula/oned \
            src/cli/onetemplate \
            src/cli/onedb \
            share/scripts/one \
-           src/authm_mad/oneauth"
+           src/authm_mad/oneauth \
+           src/catalog/bin/onize"
 
 #-------------------------------------------------------------------------------
 # C/C++ OpenNebula API Library & Development files
@@ -399,6 +411,24 @@ RUBY_OPENNEBULA_LIB_FILES="src/oca/ruby/OpenNebula/Host.rb \
                            src/oca/ruby/OpenNebula/TemplatePool.rb \
                            src/oca/ruby/OpenNebula/XMLUtils.rb"
 
+#-----------------------------------------------------------------------------
+# Catalog library files, to be installed under $LIB_LOCATION/catalog
+#-----------------------------------------------------------------------------
+CATALOG_LIB_FILES="src/catalog/Catalog.rb \
+                src/catalog/scripts/common/centos/init.d/netcontext \
+                src/catalog/scripts/common/centos/init.d/vmcontext \
+                src/catalog/scripts/common/centos/init \
+                src/catalog/scripts/common/debian/init.d/netcontext \
+                src/catalog/scripts/common/debian/init.d/vmcontext \
+                src/catalog/scripts/common/debian/init \
+                src/catalog/scripts/common/contextualize \
+                src/catalog/scripts/common/scripts_common.sh \
+                src/catalog/scripts/ec2/context/ec2one.tar \
+                src/catalog/scripts/ec2/context/init.sh \
+                src/catalog/scripts/ec2/download \
+                src/catalog/scripts/ec2/ec2.rc \
+                src/catalog/scripts/ec2/list \
+                src/catalog/scripts/ec2/toone"
 
 #-----------------------------------------------------------------------------
 # MAD Script library files, to be installed under $LIB_LOCATION/<script lang>
@@ -601,6 +631,11 @@ HM_ETC_FILES="src/hm_mad/hmrc"
 
 AUTH_ETC_FILES="src/authm_mad/auth_mad \
                 src/authm_mad/auth.conf"
+
+#-------------------------------------------------------------------------------
+# Catalog config. files, to be installed under $ETC_LOCATION
+#-------------------------------------------------------------------------------
+CATALOG_ETC_FILES="src/catalog/etc/catalog.conf"
 
 #-------------------------------------------------------------------------------
 # Sample files, to be installed under $SHARE_LOCATION/examples
