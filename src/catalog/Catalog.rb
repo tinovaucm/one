@@ -46,7 +46,6 @@ class Catalog
 
     def import(catalog, resource_id, template, opts={})
         download_dir=generate_download_dir(catalog, resource_id)
-        download_dir="/tmp/one/ec2dsa/1306139035ami-40f50b29/"
         puts "Working directory: #{download_dir}" if opts[:verbose]
 
         log_file = File.new("#{download_dir}/log", 'a')
@@ -93,7 +92,7 @@ CATALOG_RESOURCE=#{resource_id}
 EOT
             f.puts image_template
         end
-        puts `cat #{download_dir}/image.one"` if opts[:verbose] 
+        puts `cat #{download_dir}/image.one` if opts[:verbose] 
 
         # Add Image to OpenNebula
         client = OpenNebula::Client.new
