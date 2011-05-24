@@ -40,6 +40,45 @@ require 'stringio'
 #     error message for the failure
 #     ERROR MESSAGE ------>8--
 
+module NonBlocking
+    def run
+        std = execute
+
+        # Close standard IO descriptors
+        if @stdin
+            std[0] << @stdin
+            std[0].flush
+        end
+        std[0].close if !std[0].closed?
+
+        @stderr = ""
+
+        while true
+           begin
+               str=nil
+               str=std[2].readline
+           rescue Errno::EAGAIN
+           rescue EOFError
+               break
+           end
+
+           @stderr << str
+           log(str)
+        end
+
+        @stdout=std[1].read
+        std[1].close if !std[1].closed?
+        std[2].close if !std[2].closed?
+
+        @code=get_exit_code(@stderr)
+
+        if @code!=0
+            log("Command execution fail: #{command}")
+        end
+        
+        return @code
+    end
+end
 
 class GenericCommand
     attr_reader :code, :stdout, :stderr, :command
@@ -127,6 +166,10 @@ private
     def execute
         Open3.popen3("#{command} ; echo ExitCode: $? 1>&2")
     end
+end
+
+class NonBlockingLocalCommand < LocalCommand
+    include NonBlocking
 end
 
 # Executes commands in a remote machine ussing ssh. See documentation
