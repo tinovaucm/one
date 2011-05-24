@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+# -------------------------------------------------------------------------- #
+# Copyright 2002-2011, OpenNebula Project Leads (OpenNebula.org)             #
+#                                                                            #
+# Licensed under the Apache License, Version 2.0 (the "License"); you may    #
+# not use this file except in compliance with the License. You may obtain    #
+# a copy of the License at                                                   #
+#                                                                            #
+# http://www.apache.org/licenses/LICENSE-2.0                                 #
+#                                                                            #
+# Unless required by applicable law or agreed to in writing, software        #
+# distributed under the License is distributed on an "AS IS" BASIS,          #
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   #
+# See the License for the specific language governing permissions and        #
+# limitations under the License.                                             #
+#--------------------------------------------------------------------------- #
+
+require 'rexml/document'
+
+###########################################################################
+# Patterns to parse the Template File
+###########################################################################
+NAME_REG     =/[\w\d_-]+/
+VARIABLE_REG =/\s*(#{NAME_REG})\s*=\s*/
+SIMPLE_VARIABLE_REG =/#{VARIABLE_REG}([^\[]+?)(#.*)?/
+SINGLE_VARIABLE_REG =/^#{SIMPLE_VARIABLE_REG}$/
+
+def parse_template(file)
+    conf_file=File.read(file)
+
+    conf=Hash.new
+    conf_file.scan(SINGLE_VARIABLE_REG) {|m|
+        key=m[0].strip.upcase
+        value=m[1].strip
+    
+        # hack to skip multiline VM_TYPE values
+        next if %w{NAME TEMPLATE}.include? key.upcase
+    
+        if conf[key]
+            if !conf[key].kind_of?(Array)
+                conf[key]=[conf[key]]
+            end
+            conf[key]<<value
+        else
+            conf[key]=value
+        end
+    }
+
+    conf
+end
+
+download_dir=ARGV[0]
+image_id=ARGV[1]
+template=ARGV[2]
+
+file_xml = File.new(Dir.glob("#{download_dir}/*.manifest.xml").first)
+
+doc = REXML::Document.new(file_xml).root
+
+arch = doc.elements['machine_configuration/architecture'].text
+root = doc.elements["machine_configuration/block_device_mapping/mapping[virtual=\"ami\"]/device"].text
+
+vm_template = nil
+c_template = parse_template(template)
+dirname = File.expand_path(File.dirname(__FILE__))
+File.open("#{download_dir}/template.one", 'w') do |f|
+    vm_template = <<EOT
+OS = [
+    ARCH=#{arch},
+    #{c_template['KERNEL'] ? "KERNEL=#{c_template['KERNEL']}," : nil }
+    #{c_template['INITRD'] ? "INITRD=#{c_template['INITRD']}," : nil }
+    ROOT=#{root}
+]
+
+DISK = [
+    IMAGE_ID=#{image_id},
+    TARGET=#{root[0,3]}
+]
+
+CONTEXT = [
+    AMI_ID="$IMAGE[CATALOG_RESOURCE, IMAGE_ID=#{ami_id}]",
+    EC2ONE="ec2one.tar",
+    #{c_template['USER_DATA'] ? "USER_DATA=#{File.basename(c_template['USER_DATA'])}," : nil }
+    #{c_template['PUBLIC_KEY'] ? "PUBLIC_KEY=#{File.basename(c_template['PUBLIC_KEY'])}," : nil }
+    FILES="#{dirname}/context/init.sh #{dirname}/context/ec2one.tar #{c_template['USER_DATA'] ? "#{c_template['USER_DATA']}" : nil } #{c_template['PUBLIC_KEY'] ? "#{c_template['PUBLIC_KEY']}" : nil }",
+    TARGET="hdc"
+]
+EOT
+  f.puts vm_template
+end
+
+puts "#{download_dir}/template.one"

@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+# --------------------------------------------------------------------------
+# Copyright 2002-2011, OpenNebula Project Leads (OpenNebula.org)
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# --------------------------------------------------------------------------
+
+ONE_LOCATION=ENV["ONE_LOCATION"]
+
+if !ONE_LOCATION
+    RUBY_LIB_LOCATION  = "/usr/lib/one/ruby"
+    CONFIGURATION_FILE = "/etc/one/catalog.conf"
+else
+    RUBY_LIB_LOCATION  = ONE_LOCATION+"/lib/ruby"
+    CONFIGURATION_FILE = ONE_LOCATION+"/etc/catalog.conf"
+end
+
+$: << RUBY_LIB_LOCATION
+$: << RUBY_LIB_LOCATION+"/catalog"
+
+require 'getoptlong'
+require 'csv'
+require 'Catalog'
+
+options = GetoptLong.new(
+            ['--template',  '-t', GetoptLong::REQUIRED_ARGUMENT],
+            ['--verbose',   '-v', GetoptLong::NO_ARGUMENT],
+            ['--nocontext', '-n', GetoptLong::NO_ARGUMENT]
+        )
+        
+template = nil
+opts = Hash.new
+opts[:contextualize]=true
+opts[:verbose]=false
+
+begin
+    options.each do |opt, arg|
+        case opt
+            when '--template'
+                template = arg
+            when '--verbose'
+                opts[:verbose]=true
+            when 'nocontext'
+                opts[:contextualize]=false
+        end
+    end
+rescue Exception => e
+    exit(-1)
+end
+
+begin
+    catalog = Catalog.new
+rescue Exception => e
+    puts "#{e.message}"
+    exit(-1)
+end
+
+if !ARGV[0]
+    puts "[COMMAND] not present"
+    puts "Execute #{cmd_name} -h for help."
+    exit(-1)
+end
+
+case ARGV[0].downcase
+    when 'list'
+        rc = catalog.list
+        if rc.first
+            CSV.parse(rc[1]).each {|line|
+                str = ""
+                line.each {|value| str << value + "\t"}
+                puts str
+            }
+        else
+            puts rc[1]
+        end
+    when 'import'
+        catalog_id = ARGV[1]
+        resource_id = ARGV[2]
+ 
+        if !catalog_id || !resource_id
+            puts "import: You have to specify a catalog and a resource"
+            exit(-1)
+        end
+
+        rc = catalog.import(catalog_id, resource_id, template, opts)
+
+        if rc.first
+            onize = rc[1].split(':')
+            puts "New image created: #{onize[0]}"
+            puts "New template created: #{onize[1]}"
+        else
+            puts rc[1]
+        end
+    else
+        puts "Command #{ARGV[0]} not valid."
+        exit(-1)
+end

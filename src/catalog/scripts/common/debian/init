@@ -1,0 +1,34 @@
+# --------------------------------------------------------------------------
+# Copyright 2002-2011, OpenNebula Project Leads (OpenNebula.org)
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# --------------------------------------------------------------------------
+
+function init_distro
+{
+  # OpenNebula Networking Context
+  cp $DISTRO_PATH/init.d/netcontext $DEST_DIR/etc/init.d/netcontext
+  chmod 755 $DEST_DIR/etc/init.d/netcontext
+
+  # OpenNebula VM Context
+  cp $DISTRO_PATH/init.d/vmcontext $DEST_DIR/etc/init.d/vmcontext
+  chmod 755 $DEST_DIR/etc/init.d/vmcontext
+
+  # Add init scripts to boot sequence
+  SNETWORKING=`basename \`find $DEST_DIR/etc/rc* | grep networking | grep rcS\`|tr -dc 0-9`
+  chroot $DEST_DIR update-rc.d netcontext start $(($SNETWORKING-1)) S . 1>&2
+  chroot $DEST_DIR update-rc.d vmcontext start $(($SNETWORKING+1)) S . 1>&2
+
+  # Remove ubuntu network persistence
+  rm -f $DEST_DIR/etc/udev/rules.d/70-persistent-net.rules
+}
