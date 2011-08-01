@@ -196,6 +196,7 @@ string& VMTemplate::to_xml(string& xml) const
             << "<GNAME>"    << gname      << "</GNAME>" 
             << "<NAME>"     << name       << "</NAME>"
             << "<PUBLIC>"   << public_obj << "</PUBLIC>"
+            << "<ENABLED>"  << enabled    << "</ENABLED>"
             << "<REGTIME>"  << regtime    << "</REGTIME>"
             << obj_template->to_xml(template_xml)
         << "</VMTEMPLATE>";
@@ -224,6 +225,7 @@ int VMTemplate::from_xml(const string& xml)
     rc += xpath(gname,      "/VMTEMPLATE/GNAME",   "not_found");
     rc += xpath(name,       "/VMTEMPLATE/NAME",    "not_found");
     rc += xpath(public_obj, "/VMTEMPLATE/PUBLIC",  0);
+    rc += xpath(enabled,    "/VMTEMPLATE/ENABLED", 0);
     rc += xpath(regtime,    "/VMTEMPLATE/REGTIME", 0);
 
     // Get associated classes

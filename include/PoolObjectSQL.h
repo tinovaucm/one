@@ -53,6 +53,7 @@ public:
              gname(_gname),
              valid(true),
              public_obj(0),
+             enabled(1),
              obj_template(0),
              table(_table)
     {
@@ -79,8 +80,8 @@ public:
     };
 
     /**
-     *  Returns true if the image is public
-     *     @return true if the image is public
+     *  Returns true if the object is public
+     *     @return true if the object is public
      */
     bool isPublic()
     {
@@ -399,9 +400,42 @@ protected:
     int     public_obj;
 
     /**
+     *  Set if the object is enabled
+     */
+    int     enabled;
+
+    /**
      *  Template for this object, will be allocated if needed
      */
     Template * obj_template;
+
+    /**
+     *  Checks if the object is enabled
+     *    @return true if the object is enabled
+     */
+    bool is_enabled() const
+    {
+        return ( enabled == 1 );
+    };
+
+    /**
+     *  Enables or disables the object
+     *    @param enable true to enable the object
+     *    @return 0 on success
+     */
+    int enable(bool enable)
+    {
+        if ( enable )
+        {
+            enabled = 1;
+        }
+        else
+        {
+            enabled = 0;
+        }
+
+        return 0;
+    };
 
 private:
 

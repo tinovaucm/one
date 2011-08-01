@@ -89,21 +89,31 @@ public:
     };
 
     /**
-     *   Disables the current host, it will not be monitored nor used by the
-     *   scheduler
+     *  Checks if the object is enabled
+     *    @return true if the object is enabled
      */
-    void disable()
+    bool is_enabled() const
     {
-        state = DISABLED;
+        return ( state != DISABLED );
     };
 
     /**
-     *   Enables the current host, it will be monitored and could be used by
-     *   the scheduler
+     *  Enables or disables the object
+     *    @param enable true to enable the object
+     *    @return 0 on success
      */
-    void enable()
+    int enable(bool enable)
     {
-        state = INIT;
+        if ( enable )
+        {
+            state = INIT;
+        }
+        else
+        {
+            state = DISABLED;
+        }
+
+        return 0;
     };
 
     /** Update host counters and update the whole host on the DB

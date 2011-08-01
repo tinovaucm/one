@@ -42,10 +42,20 @@ public:
      *  Check if the user is enabled
      *    @return true if the user is enabled
      */
-     bool isEnabled() const
-     {
-        return enabled;
-     }
+    bool is_enabled() const
+    {
+        return PoolObjectSQL::is_enabled();
+    };
+
+    /**
+     *  Enables or disables the object
+     *    @param enable true to enable the object
+     *    @return 0 on success
+     */
+    int enable(bool enable)
+    {
+        return PoolObjectSQL::enable(enable);
+    };
 
     /**
      *  Returns user password
@@ -54,22 +64,6 @@ public:
     const string& get_password() const
     {
         return password;
-    };
-
-    /**
-     *   Enables the current user
-     */
-    void enable()
-    {
-        enabled = true;
-    };
-
-    /**
-     *   Disables the current user
-     */
-    void disable()
-    {
-        enabled = false;
     };
 
     /**
@@ -104,11 +98,6 @@ private:
      *  User's password
      */
     string      password;
-
-    /**
-     * Flag marking user enabled/disabled
-     */
-    bool        enabled;
 
     // *************************************************************************
     // DataBase implementation (Private)
@@ -154,8 +143,17 @@ protected:
          const string& _password, 
          bool          _enabled):
         PoolObjectSQL(id,_uname,-1,_gid,"",_gname,table),
-        password(_password),
-        enabled(_enabled){};
+        password(_password)
+    {
+        if ( _enabled == true )
+        {
+            enabled = 1;
+        }
+        else
+        {
+            enabled = 0;
+        }
+    };
 
     virtual ~User(){};
 

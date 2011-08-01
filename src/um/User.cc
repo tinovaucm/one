@@ -122,8 +122,6 @@ string& User::to_xml(string& xml) const
     ostringstream   oss;
     string          collection_xml;
 
-    int  enabled_int = enabled?1:0;
-
     oss <<
     "<USER>"
          "<ID>"          << oid         <<"</ID>"      <<
@@ -131,7 +129,7 @@ string& User::to_xml(string& xml) const
          "<GNAME>"       << gname       <<"</GNAME>"   <<
          "<NAME>"        << name        <<"</NAME>"    <<
          "<PASSWORD>"    << password    <<"</PASSWORD>"<<
-         "<ENABLED>"     << enabled_int <<"</ENABLED>" <<
+         "<ENABLED>"     << enabled     <<"</ENABLED>" <<
     "</USER>";
 
     xml = oss.str();
@@ -145,7 +143,6 @@ string& User::to_xml(string& xml) const
 int User::from_xml(const string& xml)
 {
     int rc = 0;
-    int int_enabled;
     vector<xmlNodePtr> content;
 
     // Initialize the internal XML object
@@ -156,9 +153,7 @@ int User::from_xml(const string& xml)
     rc += xpath(gname,       "/USER/GNAME",    "not_found");
     rc += xpath(name,        "/USER/NAME",     "not_found");
     rc += xpath(password,    "/USER/PASSWORD", "not_found");
-    rc += xpath(int_enabled, "/USER/ENABLED",  0);
-
-    enabled = int_enabled;
+    rc += xpath(enabled,     "/USER/ENABLED",  0);
 
     if (rc != 0)
     {

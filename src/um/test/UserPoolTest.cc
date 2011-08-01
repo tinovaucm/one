@@ -270,7 +270,7 @@ public:
 
         user = ((UserPool*)pool)->get(oid, true);
 
-        user->disable();
+        user->enable(false);
         pool->update(user);
 
         user->unlock();
@@ -278,7 +278,7 @@ public:
         // Check the cache
 
         user = ((UserPool*)pool)->get(oid,false);
-        CPPUNIT_ASSERT( user->isEnabled() == false );
+        CPPUNIT_ASSERT( user->is_enabled() == false );
 
         //Now force access to DB
 
@@ -286,7 +286,7 @@ public:
         user = ((UserPool*)pool)->get(oid,false);
 
         CPPUNIT_ASSERT( user != 0 );
-        CPPUNIT_ASSERT( user->isEnabled() == false );
+        CPPUNIT_ASSERT( user->is_enabled() == false );
     };
 
     void duplicates()

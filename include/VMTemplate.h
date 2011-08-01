@@ -56,6 +56,25 @@ public:
         return 0;
     };
 
+    /**
+     *  Checks if the object is enabled
+     *    @return true if the object is enabled
+     */
+    bool is_enabled() const
+    {
+        return PoolObjectSQL::is_enabled();
+    };
+
+    /**
+     *  Enables or disables the object
+     *    @param enable true to enable the object
+     *    @return 0 on success
+     */
+    int enable(bool enable)
+    {
+        return PoolObjectSQL::enable(enable);
+    };
+
     // ------------------------------------------------------------------------
     // Template Contents
     // ------------------------------------------------------------------------

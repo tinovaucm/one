@@ -172,7 +172,7 @@ public:
         host = hpool->get(oid, true);
         CPPUNIT_ASSERT( host != 0 );
 
-        host->disable();
+        host->enable(false);
         hpool->update(host);
 
         host->unlock();

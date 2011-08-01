@@ -353,7 +353,7 @@ public:
             {
                 host = hp->get(oid, false);
                 CPPUNIT_ASSERT(host!=0);
-                host->disable();
+                host->enable(false);
                 hp->update(host);
             }
         }

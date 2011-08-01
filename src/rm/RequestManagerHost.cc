@@ -48,14 +48,7 @@ void HostEnable::request_execute(xmlrpc_c::paramList const& paramList,
         return;
     }
 
-    if ( enable == true)
-    {
-        host->enable();
-    }
-    else
-    {
-        host->disable();
-    }
+    host->enable(enable);
 
     hpool->update(host);
 
