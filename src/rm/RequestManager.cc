@@ -23,6 +23,7 @@
 #include "RequestManagerInfo.h"
 #include "RequestManagerDelete.h"
 #include "RequestManagerPublish.h"
+#include "RequestManagerEnable.h"
 #include "RequestManagerAllocate.h"
 #include "RequestManagerUpdateTemplate.h"
 #include "RequestManagerChown.h"
@@ -30,7 +31,6 @@
 #include "RequestManagerVirtualNetwork.h"
 #include "RequestManagerVirtualMachine.h"
 #include "RequestManagerVMTemplate.h"
-#include "RequestManagerHost.h"
 #include "RequestManagerImage.h"
 #include "RequestManagerUser.h"
 #include "RequestManagerAcl.h"
@@ -265,6 +265,12 @@ void RequestManager::register_xml_methods()
     xmlrpc_c::methodPtr vn_publish(new VirtualNetworkPublish());
     xmlrpc_c::methodPtr image_publish(new ImagePublish());
 
+    // Enable Methods
+    xmlrpc_c::methodPtr template_enable(new TemplateEnable());
+    xmlrpc_c::methodPtr host_enable(new HostEnable());
+    xmlrpc_c::methodPtr user_enable(new UserEnable());
+
+
     // Delete Methods
     xmlrpc_c::methodPtr host_delete(new HostDelete());
     xmlrpc_c::methodPtr template_delete(new TemplateDelete());
@@ -294,9 +300,6 @@ void RequestManager::register_xml_methods()
     xmlrpc_c::methodPtr template_pool_info(new TemplatePoolInfo());
     xmlrpc_c::methodPtr vnpool_info(new VirtualNetworkPoolInfo());
     xmlrpc_c::methodPtr imagepool_info(new ImagePoolInfo());
-
-    // Host Methods
-    xmlrpc_c::methodPtr host_enable(new HostEnable());
 
     // Image Methods
     xmlrpc_c::methodPtr image_persistent(new ImagePersistent());
@@ -330,6 +333,7 @@ void RequestManager::register_xml_methods()
     RequestManagerRegistry.addMethod("one.template.instantiate",template_instantiate);
     RequestManagerRegistry.addMethod("one.template.allocate",template_allocate);
     RequestManagerRegistry.addMethod("one.template.publish", template_publish);
+    RequestManagerRegistry.addMethod("one.template.enable", template_enable);
     RequestManagerRegistry.addMethod("one.template.delete", template_delete);
     RequestManagerRegistry.addMethod("one.template.info", template_info);
     RequestManagerRegistry.addMethod("one.template.chown", template_chown);
@@ -370,6 +374,7 @@ void RequestManager::register_xml_methods()
     RequestManagerRegistry.addMethod("one.user.info", user_info);
     RequestManagerRegistry.addMethod("one.user.passwd", user_change_password);
     RequestManagerRegistry.addMethod("one.user.chgrp", user_chown);
+    RequestManagerRegistry.addMethod("one.user.enable", user_enable);
 
     RequestManagerRegistry.addMethod("one.userpool.info", userpool_info);
     

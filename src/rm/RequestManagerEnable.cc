@@ -14,49 +14,55 @@
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
 
-#include "RequestManagerHost.h"
-#include "Nebula.h"
+#include "RequestManagerEnable.h"
 
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
+using namespace std;
 
-void HostEnable::request_execute(xmlrpc_c::paramList const& paramList,
-                                 RequestAttributes& att)
+/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------- */
+
+void RequestManagerEnable::request_execute(
+        xmlrpc_c::paramList const& paramList,
+        RequestAttributes& att)
 {
-    int     id      = xmlrpc_c::value_int(paramList.getInt(1));
-    bool    enable  = xmlrpc_c::value_boolean(paramList.getBoolean(2));
+    int             oid   = xmlrpc_c::value_int(paramList.getInt(1));
+    bool            eflag = xmlrpc_c::value_boolean(paramList.getBoolean(2));
+    PoolObjectSQL * object;
 
-    Host * host;
-
-    HostPool * hpool = static_cast<HostPool *>(pool);
-
-    string error_str;
-
-    if ( basic_authorization(id, att) == false )
+    if ( basic_authorization(oid, att) == false )
     {
         return;
     }
 
-    host = hpool->get(id,true);
+    object = pool->get(oid,true);
 
-    if ( host  == 0 )
-    {
+    if ( object == 0 )                             
+    {                                            
         failure_response(NO_EXISTS,
-                get_error(object_name(auth_object),id),
+                get_error(object_name(auth_object),oid),
                 att);
 
         return;
+    }    
+
+    int rc = enable(object,eflag);
+    
+    if ( rc != 0 )
+    {
+        failure_response(INTERNAL,
+                request_error("Cannot enable/disable resource",""),
+                att);
+
+        object->unlock();
+        return;
     }
 
-    host->enable(enable);
+    pool->update(object);
 
-    hpool->update(host);
+    object->unlock();
 
-    host->unlock();
+    success_response(oid, att);
 
-    success_response(id, att);
+    return;
 }
-
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
 
