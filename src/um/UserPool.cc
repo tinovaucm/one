@@ -211,6 +211,7 @@ bool UserPool::authenticate(const string& session,
 
     int  uid, gid;
     int  rc;
+    bool enabled;
     bool result;
 
     Nebula&     nd      = Nebula::instance();
@@ -220,6 +221,7 @@ bool UserPool::authenticate(const string& session,
     group_id = -1;
     uname    = "";
     gname    = "";
+    enabled  = true;
     result   = false;
 
     rc = User::split_secret(session,username,secret);
@@ -239,6 +241,8 @@ bool UserPool::authenticate(const string& session,
 
         tuname  = user->name;
         tgname  = user->gname;
+
+        enabled = user->is_enabled();
 
         user->unlock();
     }
@@ -266,27 +270,11 @@ bool UserPool::authenticate(const string& session,
             result   = true;
         }
     }
-    else if (authm == 0) //plain auth
+    else if ( enabled )
     {
-        if ( user != 0 && ar.plain_authenticate()) //no plain for external users
+        if (authm == 0) //plain auth
         {
-            user_id  = uid;
-            group_id = gid;
-
-            uname = tuname;
-            gname = tgname;
-
-            result   = true;
-        }
-    }
-    else //use the driver
-    {
-        authm->trigger(AuthManager::AUTHENTICATE,&ar);
-        ar.wait();
-
-        if (ar.result==true)
-        {
-            if ( user != 0 ) //knwon user_id
+            if ( user != 0 && ar.plain_authenticate()) //no plain for external users
             {
                 user_id  = uid;
                 group_id = gid;
@@ -296,56 +284,75 @@ bool UserPool::authenticate(const string& session,
 
                 result   = true;
             }
-            else //External user, username & pass in driver message
+        }
+        else //use the driver
+        {
+            authm->trigger(AuthManager::AUTHENTICATE,&ar);
+            ar.wait();
+
+            if (ar.result==true)
             {
-                string mad_name;
-                string mad_pass;
-                string error_str;
-
-                istringstream is(ar.message);
-
-                if ( is.good() )
+                if ( user != 0 ) //knwon user_id
                 {
-                    is >> mad_name >> ws >> mad_pass;
-                }
+                    user_id  = uid;
+                    group_id = gid;
 
-                if ( !is.fail() )
-                {
-                    allocate(&user_id,
-                             GroupPool::USERS_ID,
-                             mad_name,
-                             GroupPool::USERS_NAME,
-                             mad_pass,
-                             true,
-                             error_str);
-                }
-
-                if ( user_id == -1 )
-                {
-                    ostringstream oss;
-
-                    oss << "Can't create user: " << error_str <<
-                           ". Driver response: " << ar.message;
-
-                    ar.message = oss.str();
-                }
-                else
-                {
-                    group_id = GroupPool::USERS_ID;
-
-                    uname = mad_name;
-                    gname = GroupPool::USERS_NAME;
+                    uname = tuname;
+                    gname = tgname;
 
                     result   = true;
                 }
-            }
-        }
-        else
-        {
-            ostringstream oss;
-            oss << "Auth Error: " << ar.message;
+                else //External user, username & pass in driver message
+                {
+                    string mad_name;
+                    string mad_pass;
+                    string error_str;
 
-            NebulaLog::log("AuM",Log::ERROR,oss);
+                    istringstream is(ar.message);
+
+                    if ( is.good() )
+                    {
+                        is >> mad_name >> ws >> mad_pass;
+                    }
+
+                    if ( !is.fail() )
+                    {
+                        allocate(&user_id,
+                                 GroupPool::USERS_ID,
+                                 mad_name,
+                                 GroupPool::USERS_NAME,
+                                 mad_pass,
+                                 true,
+                                 error_str);
+                    }
+
+                    if ( user_id == -1 )
+                    {
+                        ostringstream oss;
+
+                        oss << "Can't create user: " << error_str <<
+                               ". Driver response: " << ar.message;
+
+                        ar.message = oss.str();
+                    }
+                    else
+                    {
+                        group_id = GroupPool::USERS_ID;
+
+                        uname = mad_name;
+                        gname = GroupPool::USERS_NAME;
+
+                        result   = true;
+                    }
+                }
+            }
+            else
+            {
+                ostringstream oss;
+                oss << "Auth Error: " << ar.message;
+
+                NebulaLog::log("AuM",Log::ERROR,oss);
+            }
         }
     }
 
