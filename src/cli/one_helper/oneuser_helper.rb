@@ -91,11 +91,16 @@ class OneUserHelper < OpenNebulaHelper::OneHelper
                 helper.gid_to_str(d["GID"], options)
             end
 
+            column :ENABLED, "Whether the User is enabled or not",
+                :size=>4 do |d|
+                OpenNebulaHelper.boolean_to_str(d["ENABLED"])
+            end
+
             column :PASSWORD, "Password of the User", :size=>50 do |d|
                 d['PASSWORD']
             end
 
-            default :ID, :GROUP, :NAME, :PASSWORD
+            default :ID, :GROUP, :NAME, :ENABLED, :PASSWORD
         end
 
         if top

@@ -26,6 +26,10 @@
   :desc: Whether the Template is public or not
   :size: 3
 
+:ENABLED: 
+  :desc: Whether the Template is public or not
+  :size: 4
+
 :default:
 - :ID
 - :USER
@@ -33,3 +37,4 @@
 - :NAME
 - :REGTIME
 - :PUBLIC
+- :ENABLED

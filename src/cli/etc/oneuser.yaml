@@ -1,17 +1,21 @@
 --- 
 :ID: 
-  :desc: ONE identifier for the Template
+  :desc: ONE identifier for the User
   :size: 4
 
 :NAME: 
-  :desc: Name of the Template
+  :desc: Name of the User
   :size: 15
   :left: true
 
 :GROUP: 
-  :desc: Group of the Template
+  :desc: Group of the User
   :size: 8
   :left: true
+
+:ENABLED: 
+  :desc: Whether the User is public or not
+  :size: 4
 
 :PASSWORD: 
   :desc: Password of the User
@@ -21,4 +25,5 @@
 - :ID
 - :GROUP
 - :NAME
+- :ENABLED
 - :PASSWORD

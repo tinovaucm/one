@@ -84,7 +84,7 @@ cmd=CommandParser::CmdParser.new(ARGV) do
     end
 
     delete_desc = <<-EOT.unindent
-        Deletes the given Image
+        Deletes the given Template
     EOT
 
     command :delete, delete_desc, [:range, :templateid_list] do
@@ -129,6 +129,26 @@ cmd=CommandParser::CmdParser.new(ARGV) do
     command :unpublish, unpublish_desc, [:range,:templateid_list] do
         helper.perform_actions(args[0],options,"unpublished") do |t|
             t.unpublish
+        end
+    end
+
+    enable_desc = <<-EOT.unindent
+        Enables the given Template
+    EOT
+
+    command :enable, enable_desc, [:range,:templateid_list] do
+        helper.perform_actions(args[0],options,"enabled") do |t|
+            t.enable
+        end
+    end
+
+    disable_desc = <<-EOT.unindent
+        Disables the given Template
+    EOT
+
+    command :disable, disable_desc, [:range,:templateid_list] do
+        helper.perform_actions(args[0],options,"disabled") do |t|
+            t.disable
         end
     end
 

@@ -28,7 +28,8 @@ module OpenNebula
             :update      => "template.update",
             :publish     => "template.publish",
             :delete      => "template.delete",
-            :chown       => "template.chown"
+            :chown       => "template.chown",
+            :enable      => "template.enable"
         }
 
         # Creates a Template description with just its identifier
@@ -104,9 +105,25 @@ module OpenNebula
             set_publish(true)
         end
 
-        # Unplubishes the Image
+        # Unplubishes the Template
         def unpublish
             set_publish(false)
+        end
+
+        # Enables the Template
+        #
+        # @return [nil, OpenNebula::Error] nil in case of success, Error
+        #   otherwise
+        def enable()
+            set_enabled(true)
+        end
+
+        # Disables the Template
+        #
+        # @return [nil, OpenNebula::Error] nil in case of success, Error
+        #   otherwise
+        def disable()
+            set_enabled(false)
         end
 
         # Changes the owner/group
@@ -137,6 +154,20 @@ module OpenNebula
             return Error.new('ID not defined') if !@pe_id
 
             rc = @client.call(TEMPLATE_METHODS[:publish], @pe_id, published)
+            rc = nil if !OpenNebula.is_error?(rc)
+
+            return rc
+        end
+
+        # Calls the enable xml-rpc method with the given parameter
+        # @param enabled [Boolean] true to enable, false to disable
+        #
+        # @return [nil, OpenNebula::Error] nil in case of success, Error
+        #   otherwise
+        def set_enabled(enabled)
+            return Error.new('ID not defined') if !@pe_id
+
+            rc = @client.call(TEMPLATE_METHODS[:enable], @pe_id, enabled)
             rc = nil if !OpenNebula.is_error?(rc)
 
             return rc

@@ -26,7 +26,8 @@ module OpenNebula
             :allocate => "user.allocate",
             :delete   => "user.delete",
             :passwd   => "user.passwd",
-            :chgrp    => "user.chgrp"
+            :chgrp    => "user.chgrp",
+            :enable   => "user.enable"
         }
 
         SELF = -1
@@ -104,6 +105,22 @@ module OpenNebula
             return rc
         end
 
+        # Enables the User
+        #
+        # @return [nil, OpenNebula::Error] nil in case of success, Error
+        #   otherwise
+        def enable()
+            set_enabled(true)
+        end
+
+        # Disables the User
+        #
+        # @return [nil, OpenNebula::Error] nil in case of success, Error
+        #   otherwise
+        def disable()
+            set_enabled(false)
+        end
+
         # ---------------------------------------------------------------------
         # Helpers to get User information
         # ---------------------------------------------------------------------
@@ -112,6 +129,21 @@ module OpenNebula
         # [return] _Integer_ the element's group ID
         def gid
             self['GID'].to_i
+        end
+
+    private
+        # Calls the enable xml-rpc method with the given parameter
+        # @param enabled [Boolean] true to enable, false to disable
+        #
+        # @return [nil, OpenNebula::Error] nil in case of success, Error
+        #   otherwise
+        def set_enabled(enabled)
+            return Error.new('ID not defined') if !@pe_id
+
+            rc = @client.call(USER_METHODS[:enable], @pe_id, enabled)
+            rc = nil if !OpenNebula.is_error?(rc)
+
+            return rc
         end
     end
 end

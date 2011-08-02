@@ -54,6 +54,8 @@ class OneTemplateHelper < OpenNebulaHelper::OneHelper
             OpenNebulaHelper.time_to_str(template['REGTIME'])]
         puts str % ["PUBLIC",
             OpenNebulaHelper.boolean_to_str(template['PUBLIC'])]
+        puts str % ["ENABLED",
+            OpenNebulaHelper.boolean_to_str(template['ENABLED'])]
         puts
 
         CLIHelper.print_header(str_h1 % "TEMPLATE CONTENTS",false)
@@ -90,7 +92,12 @@ class OneTemplateHelper < OpenNebulaHelper::OneHelper
                 OpenNebulaHelper.boolean_to_str(d["PUBLIC"])
             end
 
-            default :ID, :USER, :GROUP, :NAME, :REGTIME, :PUBLIC
+            column :ENABLED, "Whether the Template is enabled or not",
+                :size=>4 do |d|
+                OpenNebulaHelper.boolean_to_str(d["ENABLED"])
+            end
+
+            default :ID, :USER, :GROUP, :NAME, :REGTIME, :PUBLIC, :ENABLED
         end
 
         if top
