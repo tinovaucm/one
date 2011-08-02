@@ -49,6 +49,21 @@ void VMTemplateInstantiate::request_execute(xmlrpc_c::paramList const& paramList
         return;
     }
 
+    if ( rtmpl->is_enabled() == false )
+    {
+        ostringstream oss;
+
+        oss << object_name(auth_object) << " is not enabled";
+
+        failure_response(ACTION,
+                request_error(oss.str(),""),
+                att);
+
+        rtmpl->unlock();
+
+        return;
+    }
+
     tmpl = rtmpl->clone_template();
     ouid = rtmpl->get_uid();
     ogid = rtmpl->get_gid();

@@ -240,11 +240,11 @@ string Request::request_error (const string &err_desc, const string &err_detail)
 {
     ostringstream oss;
 
-    oss << "[" << method_name << "] " << err_desc;
+    oss << "[" << method_name << "] " << err_desc << ".";
 
     if (!err_detail.empty())
     {
-        oss << ". " << err_detail;
+        oss << " " << err_detail;
     }
 
     return oss.str();
