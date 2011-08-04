@@ -65,6 +65,7 @@ class UserPoolTest : public PoolTest
     CPPUNIT_TEST (split_secret);
     CPPUNIT_TEST (initial_user);
     CPPUNIT_TEST (authenticate);
+    CPPUNIT_TEST (disable);
     CPPUNIT_TEST (get_using_name);
     CPPUNIT_TEST (wrong_get_name);
     CPPUNIT_TEST (update);
@@ -211,6 +212,47 @@ public:
         CPPUNIT_ASSERT( rc == false );
         CPPUNIT_ASSERT( oid == -1 );
         CPPUNIT_ASSERT( gid == -1 );
+    }
+
+    void disable()
+    {
+        UserPool*   user_pool = (UserPool*) pool;
+        User *      user;
+
+        bool rc;
+        int  oid, gid;
+        string uname, gname;
+
+        // Create user and authenticate it
+        oid = allocate(0);
+        CPPUNIT_ASSERT( oid >= 0 );
+
+        string session = "A user:A pass";
+
+        rc = user_pool->authenticate( session, oid, gid, uname, gname);
+        CPPUNIT_ASSERT( rc == true );
+        CPPUNIT_ASSERT( oid == 1 );
+        CPPUNIT_ASSERT( uname == "A user" );
+
+
+        // disable the user, and try to authenticate, should fail
+
+        user = user_pool->get(oid, false);
+        CPPUNIT_ASSERT( user != 0 );
+        check(0, user);
+        CPPUNIT_ASSERT( user->is_enabled() == true );
+
+        user->enable(false);
+
+        rc = user_pool->authenticate( session, oid, gid, uname, gname);
+        CPPUNIT_ASSERT( rc == false );
+
+        // enable it again
+        user->enable(true);
+
+        rc = user_pool->authenticate( session, oid, gid, uname, gname);
+        CPPUNIT_ASSERT( rc == true );
+        CPPUNIT_ASSERT( oid == 1 );
     }
 
     void get_using_name()
