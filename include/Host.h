@@ -59,15 +59,6 @@ public:
     int from_xml(const string &xml_str);
 
     /**
-     *  Check if the host is enabled
-     *    @return true if the host is enabled
-     */
-     bool isEnabled() const
-     {
-        return state != DISABLED;
-     }
-
-    /**
      *  Updates the Host's last_monitored time stamp.
      *    @param success if the monitored action was successfully performed
      */
