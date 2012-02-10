@@ -17,11 +17,11 @@
 #--------------------------------------------------------------------------- #
 
 if [ -z "${ONE_LOCATION}" ]; then
-    DRIVERRC=/etc/one/vmm_ec2/vmm_ec2rc
+    DRIVERRC=/etc/one/drivers/virtualization/ec2/ec2rc
     MADCOMMON=/usr/lib/one/mads/madcommon.sh
     VAR_LOCATION=/var/lib/one
 else
-    DRIVERRC=$ONE_LOCATION/etc/vmm_ec2/vmm_ec2rc
+    DRIVERRC=$ONE_LOCATION/drivers/virtualization/ec2/ec2rc
     MADCOMMON=$ONE_LOCATION/lib/mads/madcommon.sh
     VAR_LOCATION=$ONE_LOCATION/var
 fi

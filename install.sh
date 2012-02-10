@@ -180,7 +180,16 @@ fi
 SHARE_DIRS="$SHARE_LOCATION/examples \
             $SHARE_LOCATION/examples/tm"
 
-ETC_DIRS="$ETC_LOCATION/image \
+ETC_VIRT_DRIVERS="$ETC_LOCATION/drivers/virtualization"
+
+ETC_MONITOR_DRIVERS="$ETC_LOCATION/drivers/monitoring"
+
+ETC_DIRS="$ETC_LOCATION/drivers \
+          $ETC_VIRT_DRIVERS \
+          $ETC_MONITOR_DRIVERS \
+          $ETC_VIRT_DRIVERS/ec2 \
+          $ETC_MONITOR_DRIVERS/ec2 \
+          $ETC_LOCATION/image \
           $ETC_LOCATION/im_ec2 \
           $ETC_LOCATION/vmm_ec2 \
           $ETC_LOCATION/vmm_exec \
@@ -522,10 +531,10 @@ INSTALL_SELF_SERVICE_FILES=(
 INSTALL_ETC_FILES=(
     ETC_FILES:$ETC_LOCATION
     VMWARE_ETC_FILES:$ETC_LOCATION
-    VMM_EC2_ETC_FILES:$ETC_LOCATION/vmm_ec2
+    VMM_EC2_ETC_FILES:$ETC_VIRT_DRIVERS/ec2
     VMM_EXEC_ETC_FILES:$ETC_LOCATION/vmm_exec
     IMAGE_DRIVER_FS_ETC_FILES:$ETC_LOCATION/image/
-    IM_EC2_ETC_FILES:$ETC_LOCATION/im_ec2
+    IM_EC2_ETC_FILES:$ETC_MONITOR_DRIVERS/ec2
     TM_SHARED_ETC_FILES:$ETC_LOCATION/tm_shared
     TM_SSH_ETC_FILES:$ETC_LOCATION/tm_ssh
     TM_DUMMY_ETC_FILES:$ETC_LOCATION/tm_dummy
@@ -839,8 +848,8 @@ VMWARE_ETC_FILES="src/vmm_mad/remotes/vmware/vmwarerc"
 #   - ssh, $ETC_LOCATION/vmm_exec
 #-------------------------------------------------------------------------------
 
-VMM_EC2_ETC_FILES="src/vmm_mad/ec2/vmm_ec2rc \
-                   src/vmm_mad/ec2/vmm_ec2.conf"
+VMM_EC2_ETC_FILES="src/vmm_mad/ec2/ec2rc \
+                   src/vmm_mad/ec2/ec2.conf"
 
 VMM_EXEC_ETC_FILES="src/vmm_mad/exec/vmm_execrc \
                   src/vmm_mad/exec/vmm_exec_kvm.conf \
@@ -852,8 +861,8 @@ VMM_EXEC_ETC_FILES="src/vmm_mad/exec/vmm_execrc \
 #   - ec2, $ETC_LOCATION/im_ec2
 #-------------------------------------------------------------------------------
 
-IM_EC2_ETC_FILES="src/im_mad/ec2/im_ec2rc \
-                  src/im_mad/ec2/im_ec2.conf"
+IM_EC2_ETC_FILES="src/im_mad/ec2/ec2rc \
+                  src/im_mad/ec2/ec2.conf"
 
 #-------------------------------------------------------------------------------
 # Storage drivers config. files, to be installed under $ETC_LOCATION
