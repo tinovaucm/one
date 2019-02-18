@@ -19,6 +19,7 @@ cd src/oca/go/src/goca
 
 # install dependencies
 go get
+go get gopkg.in/check.v1
 
 # run tests
 go test
