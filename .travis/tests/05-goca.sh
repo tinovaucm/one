@@ -17,5 +17,8 @@
 # walk to goca path
 cd src/oca/go/src/goca
 
+# install dependencies
+make get-deps
+
 # run tests
 make test
