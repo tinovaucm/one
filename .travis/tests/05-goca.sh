@@ -15,7 +15,7 @@
 #--------------------------------------------------------------------------- #
 
 # walk to goca path
-cd src/oca/go/src
+cd src/oca/go/src/goca
 
 # run tests
-make tests
+make test
