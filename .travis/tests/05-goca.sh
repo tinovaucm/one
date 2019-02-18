@@ -19,11 +19,6 @@ cd src/oca/go/src/goca
 
 # install dependencies
 go get
-echo "Debug info"
-echo $GOROOT
-echo $GOPATH
-find $GOPATH
-
 
 # run tests
-make test
+go test
