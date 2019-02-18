@@ -18,12 +18,12 @@
 cd src/oca/go/src/goca
 
 # install dependencies
+go get
 echo "Debug info"
 echo $GOROOT
 echo $GOPATH
 find $GOPATH
 
-go get
 
 # run tests
 make test
