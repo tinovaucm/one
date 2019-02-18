@@ -21,7 +21,7 @@ cd src/oca/go/src/goca
 echo "Debug info"
 echo $GOROOT
 echo $GOPATH
-tree $GOPATH
+find $GOPATH
 
 go get
 
