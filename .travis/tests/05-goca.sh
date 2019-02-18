@@ -18,6 +18,7 @@
 cd src/oca/go/src/goca
 
 # install dependencies
+go get -v github.com/Masterminds/glide
 make get-deps
 
 # run tests
