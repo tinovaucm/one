@@ -18,4 +18,4 @@
 cd src/oca/go/src
 
 # run tests
-make test
+make tests
