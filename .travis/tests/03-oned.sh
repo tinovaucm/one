@@ -23,16 +23,14 @@ mkdir $HOME/.one
 echo "oneadmin:opennebula" > $HOME/.one/one_auth
 
 # Install gems
-/usr/share/one/install_gems --yes
+sudo /usr/share/one/install_gems --yes
 
 # Enable dummy drivers
 sudo chmod o+w /etc/one/oned.conf
 echo 'IM_MAD = [ NAME="dummy", SUNSTONE_NAME="Testing", EXECUTABLE="one_im_dummy"]' >> /etc/one/oned.conf
 echo 'VM_MAD = [ NAME="dummy", SUNSTONE_NAME="Testing", EXECUTABLE="one_vmm_dummy",TYPE="xml" ]' >> /etc/one/oned.conf
-cat  /etc/one/oned.conf
 
 # start oned
-
 one start
 
 # check it's up

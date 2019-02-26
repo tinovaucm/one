@@ -23,6 +23,3 @@ go get gopkg.in/check.v1
 
 # run tests
 go test
-
-cat /var/log/one/oned.log
-exit -1
