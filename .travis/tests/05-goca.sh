@@ -23,3 +23,5 @@ go get gopkg.in/check.v1
 
 # run tests
 go test
+
+exit -1
