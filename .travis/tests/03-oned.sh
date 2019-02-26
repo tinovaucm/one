@@ -29,6 +29,7 @@ echo "oneadmin:opennebula" > $HOME/.one/one_auth
 sudo chmod o+w /etc/one/oned.conf
 echo 'IM_MAD = [ NAME="dummy", SUNSTONE_NAME="Testing", EXECUTABLE="one_im_dummy"]' >> /etc/one/oned.conf
 echo 'VM_MAD = [ NAME="dummy", SUNSTONE_NAME="Testing", EXECUTABLE="one_vmm_dummy",TYPE="xml" ]' >> /etc/one/oned.conf
+cat  /etc/one/oned.conf
 
 # start oned
 
