@@ -25,6 +25,10 @@ echo "oneadmin:opennebula" > $HOME/.one/one_auth
 # Install gems
 /usr/share/one/install_gems --yes
 
+# Enable dummy drivers
+echo 'IM_MAD = [ NAME="dummy", SUNSTONE_NAME="Testing", EXECUTABLE="one_im_dummy"]' >> /etc/one/oned.conf
+echo 'VM_MAD = [ NAME="dummy", SUNSTONE_NAME="Testing", EXECUTABLE="one_vmm_dummy",TYPE="xml" ]' >> /etc/one/oned.conf
+
 # start oned
 
 one start
