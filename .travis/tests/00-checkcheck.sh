@@ -40,7 +40,7 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     for (( i=0; i<${#conf_files[@]}; i++ ))
     do
         diff $PREVIOUS_ONE/${conf_files[$i]} $CURRENT_ONE/${conf_files[$i]}
-        [[ $? -ne 0 ]] && "OpenNebula configuration file changed: "${conf_files[$i]}
+        [[ $? -ne 0 ]] && echo "OpenNebula configuration file changed: "${conf_files[$i]} && exit -1
     done
 fi
 
