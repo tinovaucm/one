@@ -4,15 +4,12 @@ echo $TRAVIS_BRANCH
 
 if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     export PREVIOUS_ONE=~/previous.one
-    export CURRENT_ONE=../../
+    export CURRENT_ONE=$PWD
     git clone https://github.com/tinova/one $PREVIOUS_ONE
     (cd $PREVIOUS_ONE ; git checkout $TRAVIS_BRANCH ; git checkout HEAD^)
-    echo "---------------"
-    pwd
-    echo "------------------------------"
-    ls
-    echo "---------------------"
     diff $PREVIOUS_ONE/share/etc/oned.conf $CURRENT_ONE/share/etc/oned.conf
 fi
+
+echo "RESULT:"$?
 
 exit -1
