@@ -43,3 +43,5 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
         [[ $? -ne 0 ]] && "OpenNebula configuration file changed: "${conf_files[$i]}
     done
 fi
+
+exit 0
