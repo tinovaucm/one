@@ -5,9 +5,9 @@ echo $TRAVIS_BRANCH
 # In a PR we compare with the head of $TRAVIS_BRANCH
 # Otherwise, we want to check with the previous commit
 if [[ $TRAVIS_PULL_REQUEST != false ]]; then
-    export BRANCH_TO_CHECKOUT = $TRAVIS_BRANCH
+    export BRANCH_TO_CHECKOUT=$TRAVIS_BRANCH
 else
-    export BRANCH_TO_CHECKOUT = $TRAVIS_BRANCH^
+    export BRANCH_TO_CHECKOUT=$TRAVIS_BRANCH^
 fi
 
 
