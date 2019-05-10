@@ -5,7 +5,7 @@
 
 if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     export PREVIOUS_ONE=~/previous.one
-    export CURRENT_ONE=/home/travis/build/tinova/one
+    export CURRENT_ONE=$TRAVIS_BUILD_DIR
     export PREVIOUS_ONE_INSTALL=~/previous.install
     export CURRENT_ONE_INSTALL=~/current.install    
     
