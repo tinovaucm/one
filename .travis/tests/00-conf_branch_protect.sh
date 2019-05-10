@@ -24,9 +24,9 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     
     echo "Testing conf changes:"
     diff -r $PREVIOUS_ONE_INSTALL/etc $CURRENT_ONE_INSTALL/etc
-    echo $?
+    rc=$?; if [[ $rc != 1 ]]; then exit 1; fi
     diff -r $PREVIOUS_ONE_INSTALL/var/remotes/etc $CURRENT_ONE_INSTALL/var/remotes/etc
-    echo $?
+    rc=$?; if [[ $rc != 1 ]]; then exit 1; fi
 fi
 
-exit -1
+exit 0
