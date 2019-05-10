@@ -3,12 +3,9 @@
 # **previous** refers to the code base in the main repository
 # **current**  refers to the code base of the PR (or the new commit)
 
-echo $PWD
-exit -1
-
 if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     export PREVIOUS_ONE=~/previous.one
-    export CURRENT_ONE=../../
+    export CURRENT_ONE=/home/travis/build/tinova/one
     export PREVIOUS_ONE_INSTALL=~/previous.install
     export CURRENT_ONE_INSTALL=~/current.install    
     
