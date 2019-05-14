@@ -29,4 +29,9 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 fi
 
+echo "------------PREVIOUS--------"
+cat $PREVIOUS_ONE_INSTALL/etc/oned.conf
+echo "------------CURRENT---------"
+cat $CURRENT_ONE_INSTALL/etc/oned.conf
+
 exit 0
