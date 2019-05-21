@@ -17,7 +17,10 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     if [[ $TRAVIS_PULL_REQUEST == false ]]; then
         (cd $PREVIOUS_ONE ; git checkout HEAD~1)
     fi
-    
+    echo "^^^ ^^^^^^^^^^^^^ ^^^^"
+    (cd $PREVIOUS_ONE ; git --no-pager log -1)
+    (cd $CURRENT_ONE ; git --no-pager log -1)
+        echo "^^^ ^^^^^^^^^^^^^ ^^^^"
     # Install previous and current code base
     $PREVIOUS_ONE/install.sh -d $PREVIOUS_ONE_INSTALL
     $CURRENT_ONE/install.sh -d $CURRENT_ONE_INSTALL    
