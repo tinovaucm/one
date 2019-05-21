@@ -21,6 +21,10 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     (cd $PREVIOUS_ONE ; git --no-pager log -1)
     (cd $CURRENT_ONE ; git --no-pager log -1)
         echo "^^^ ^^^^^^^^^^^^^ ^^^^"
+            echo "^^^ ^^^^^^^^^^^^^ ^^^^"
+    (cd $PREVIOUS_ONE ; cat share/etc/oned.conf)
+    (cd $CURRENT_ONE ; cat share/etc/oned.conf)
+        echo "^^^ ^^^^^^^^^^^^^ ^^^^"
     # Install previous and current code base
     $PREVIOUS_ONE/install.sh -d $PREVIOUS_ONE_INSTALL
     $CURRENT_ONE/install.sh -d $CURRENT_ONE_INSTALL    
