@@ -17,17 +17,18 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     if [[ $TRAVIS_PULL_REQUEST == false ]]; then
         (cd $PREVIOUS_ONE ; git checkout HEAD~1)
     fi
-    echo "^^^ ^^^^^^^^^^^^^ ^^^^"
+    echo "[[[^^^ ^^^^^^^^^^^^^ ^^^^"
     (cd $PREVIOUS_ONE ; git --no-pager log -1)
     (cd $CURRENT_ONE ; git --no-pager log -1)
-        echo "^^^ ^^^^^^^^^^^^^ ^^^^"
-            echo "^^^ ^^^^^^^^^^^^^ ^^^^"
+    echo "********************"
+
     (cd $PREVIOUS_ONE ; cat share/etc/oned.conf)
     (cd $CURRENT_ONE ; cat share/etc/oned.conf)
-        echo "^^^ ^^^^^^^^^^^^^ ^^^^"
+    echo "]]]]]]]^^^ ^^^^^^^^^^^^^ ^^^^"
+    
     # Install previous and current code base
-    $PREVIOUS_ONE/install.sh -d $PREVIOUS_ONE_INSTALL
-    $CURRENT_ONE/install.sh -d $CURRENT_ONE_INSTALL    
+    (cd $PREVIOUS_ONE ; ./install.sh -d $PREVIOUS_ONE_INSTALL)
+    (cd $CURRENT_ONE  ; ./install.sh -d $CURRENT_ONE_INSTALL)
     
     echo "Testing conf changes:"
     diff -r $PREVIOUS_ONE_INSTALL/etc $CURRENT_ONE_INSTALL/etc
