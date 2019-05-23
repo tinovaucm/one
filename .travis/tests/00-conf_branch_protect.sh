@@ -27,8 +27,8 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     echo "----------------"
    
     # Install previous and current code base
-    (cd $PREVIOUS_ONE ; ./install.sh -d $PREVIOUS_ONE_INSTALL)
-    (cd $CURRENT_ONE  ; ./install.sh -d $CURRENT_ONE_INSTALL)
+    (cd $PREVIOUS_ONE ; ./install.sh -d $PREVIOUS_ONE_INSTALL &> /dev/null)
+    (cd $CURRENT_ONE  ; ./install.sh -d $CURRENT_ONE_INSTALL &> /dev/null)
     
     echo "Testing conf changes:"
     diff -r $PREVIOUS_ONE_INSTALL/etc $CURRENT_ONE_INSTALL/etc
