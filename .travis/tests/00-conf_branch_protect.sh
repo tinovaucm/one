@@ -17,15 +17,15 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     if [[ $TRAVIS_PULL_REQUEST == false ]]; then
         (cd $PREVIOUS_ONE ; git checkout HEAD~1)
     fi
-    echo "[[[^^^ ^^^^^^^^^^^^^ ^^^^"
-    (cd $PREVIOUS_ONE ; git --no-pager log -1)
-    (cd $CURRENT_ONE ; git --no-pager log -1)
-    echo "********************"
-
-    (cd $PREVIOUS_ONE ; cat share/etc/oned.conf)
-    (cd $CURRENT_ONE ; cat share/etc/oned.conf)
-    echo "]]]]]]]^^^ ^^^^^^^^^^^^^ ^^^^"
     
+    # Debug information
+    echo "Previous commit:"
+    (cd $PREVIOUS_ONE ; git --no-pager log -1)
+    echo "----------------"
+    echo "Current commit:"
+    (cd $CURRENT_ONE ; git --no-pager log -1)
+    echo "----------------"
+   
     # Install previous and current code base
     (cd $PREVIOUS_ONE ; ./install.sh -d $PREVIOUS_ONE_INSTALL)
     (cd $CURRENT_ONE  ; ./install.sh -d $CURRENT_ONE_INSTALL)
@@ -36,10 +36,5 @@ if [[ $TRAVIS_BRANCH =~ (^one-) ]]; then
     diff -r $PREVIOUS_ONE_INSTALL/var/remotes/etc $CURRENT_ONE_INSTALL/var/remotes/etc
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 fi
-
-echo "------------PREVIOUS--------"
-cat $PREVIOUS_ONE_INSTALL/etc/oned.conf
-echo "------------CURRENT---------"
-cat $CURRENT_ONE_INSTALL/etc/oned.conf
 
 exit 0
